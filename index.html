@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Analisis Sentimen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0891b2',
+                        'primary-foreground': '#f0f9ff',
+                        secondary: '#f59e0b',
+                        'secondary-foreground': '#451a03',
+                        background: '#ffffff',
+                        foreground: '#0f172a',
+                        muted: '#f1f5f9',
+                        'muted-foreground': '#64748b',
+                        border: '#e2e8f0',
+                        destructive: '#dc2626',
+                        'destructive-foreground': '#fef2f2'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold text-primary">SentimentAI</span>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="text-muted-foreground hover:text-foreground transition-colors">Beranda</a>
+                    <a href="#" class="text-muted-foreground hover:text-foreground transition-colors">Analisis</a>
+                    <a href="#" class="text-muted-foreground hover:text-foreground transition-colors">Laporan</a>
+                    <a href="#" class="text-muted-foreground hover:text-foreground transition-colors">Bantuan</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 space-y-12">
+        <!-- Hero Section -->
+        <section class="text-center space-y-6">
+            <h1 class="text-4xl md:text-6xl font-bold text-primary text-balance">Aplikasi Analisis Sentimen</h1>
+            <p class="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
+                Menganalisis sentimen publik terhadap suatu topik berdasarkan komentar di media sosial.
+            </p>
+        </section>
+
+        <!-- Analysis Form -->
+        <div class="max-w-4xl mx-auto bg-white rounded-lg border border-border shadow-sm">
+            <div class="p-6 border-b border-border text-center">
+                <h2 class="text-2xl font-semibold text-primary">Mulai Analisis Sentimen</h2>
+                <p class="text-muted-foreground mt-2">Masukkan topik dan komentar media sosial untuk menganalisis sentimen publik</p>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Topik Analisis</label>
+                        <input 
+                            type="text" 
+                            id="topic-input"
+                            placeholder="Contoh: Kebijakan pemerintah terbaru"
+                            class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        >
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Platform Media Sosial</label>
+                        <select id="platform-select" class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Pilih platform</option>
+                            <option value="twitter">Twitter/X</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="tiktok">TikTok</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-medium">Komentar untuk Dianalisis</label>
+                    <textarea 
+                        id="comments-input"
+                        placeholder="Masukkan komentar media sosial yang ingin dianalisis, atau upload file..."
+                        rows="6"
+                        class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    ></textarea>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button class="flex-1 px-4 py-2 border border-border rounded-md bg-transparent hover:bg-muted transition-colors flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        Upload File CSV
+                    </button>
+                    <button class="flex-1 px-4 py-2 border border-border rounded-md bg-transparent hover:bg-muted transition-colors flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Scrape Otomatis
+                    </button>
+                    <button 
+                        id="analyze-btn"
+                        class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span id="analyze-text">Analisis Sekarang</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="space-y-6 hidden">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-primary mb-2">Dashboard Analisis</h2>
+                <p class="text-muted-foreground">Hasil analisis sentimen terkini</p>
+            </div>
+
+            <!-- Overview Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-lg border border-border shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium">Total Komentar</h3>
+                        <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-2xl font-bold text-primary">1,247</div>
+                    <p class="text-xs text-muted-foreground">7 hari terakhir</p>
+                </div>
+
+                <div class="bg-white rounded-lg border border-border shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium">Pengguna Unik</h3>
+                        <svg class="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="text-2xl font-bold text-primary">892</div>
+                    <p class="text-xs text-muted-foreground">+12% dari minggu lalu</p>
+                </div>
+
+                <div class="bg-white rounded-lg border border-border shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium">Sentimen Dominan</h3>
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div class="text-2xl font-bold text-green-600">Positif</div>
+                    <p class="text-xs text-muted-foreground">45% dari total komentar</p>
+                </div>
+            </div>
+
+            <!-- Sentiment Distribution -->
+            <div class="bg-white rounded-lg border border-border shadow-sm">
+                <div class="p-6 border-b border-border">
+                    <h3 class="text-lg font-semibold">Distribusi Sentimen</h3>
+                    <p class="text-muted-foreground text-sm">Persentase sentimen berdasarkan analisis komentar</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                                <span class="text-sm font-medium">Positif</span>
+                            </div>
+                            <span class="text-sm text-muted-foreground">45%</span>
+                        </div>
+                        <div class="w-full bg-muted rounded-full h-2">
+                            <div class="bg-green-600 h-2 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                </svg>
+                                <span class="text-sm font-medium">Netral</span>
+                            </div>
+                            <span class="text-sm text-muted-foreground">30%</span>
+                        </div>
+                        <div class="w-full bg-muted rounded-full h-2">
+                            <div class="bg-gray-600 h-2 rounded-full" style="width: 30%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+                                </svg>
+                                <span class="text-sm font-medium">Negatif</span>
+                            </div>
+                            <span class="text-sm text-muted-foreground">25%</span>
+                        </div>
+                        <div class="w-full bg-muted rounded-full h-2">
+                            <div class="bg-red-600 h-2 rounded-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trending Topics -->
+            <div class="bg-white rounded-lg border border-border shadow-sm">
+                <div class="p-6 border-b border-border">
+                    <h3 class="text-lg font-semibold">Topik Trending</h3>
+                    <p class="text-muted-foreground text-sm">Topik yang paling banyak dibicarakan dengan skor sentimen</p>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium">Kebijakan Ekonomi</span>
+                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Positif</span>
+                        </div>
+                        <div class="text-sm font-medium">Skor: 78</div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium">Infrastruktur</span>
+                            <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800">Netral</span>
+                        </div>
+                        <div class="text-sm font-medium">Skor: 52</div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium">Pendidikan</span>
+                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Negatif</span>
+                        </div>
+                        <div class="text-sm font-medium">Skor: 34</div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium">Kesehatan</span>
+                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Positif</span>
+                        </div>
+                        <div class="text-sm font-medium">Skor: 82</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Cards -->
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg border border-border shadow-sm p-6 text-center">
+                <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Analisis Real-time</h3>
+                <p class="text-muted-foreground text-sm">Dapatkan hasil analisis sentimen dalam hitungan detik dengan akurasi tinggi</p>
+            </div>
+
+            <div class="bg-white rounded-lg border border-border shadow-sm p-6 text-center">
+                <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Multi-Platform</h3>
+                <p class="text-muted-foreground text-sm">Analisis komentar dari berbagai platform media sosial dalam satu dashboard</p>
+            </div>
+
+            <div class="bg-white rounded-lg border border-border shadow-sm p-6 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Akurasi Tinggi</h3>
+                <p class="text-muted-foreground text-sm">Menggunakan AI terdepan untuk memberikan hasil analisis yang akurat dan terpercaya</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
